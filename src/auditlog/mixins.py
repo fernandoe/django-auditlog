@@ -23,10 +23,13 @@ class LogEntryAdminMixin(object):
     user_url.short_description = 'User'
 
     def resource_url(self, obj):
-        app_label, model = obj.content_type.app_label, obj.content_type.model
-        viewname = 'admin:%s_%s_change' % (app_label, model)
-        link = urlresolvers.reverse(viewname, args=[obj.object_id or obj.object_pk])
-        return u'<a href="%s">%s</a>' % (link, obj.object_repr)
+        try:
+            app_label, model = obj.content_type.app_label, obj.content_type.model
+            viewname = 'admin:%s_%s_change' % (app_label, model)
+            link = urlresolvers.reverse(viewname, args=[obj.object_id or obj.object_pk])
+            return u'<a href="%s">%s</a>' % (link, obj.object_repr)
+        except Exception:
+            return u'N/A'
     resource_url.allow_tags = True
     resource_url.short_description = 'Resource'
 
